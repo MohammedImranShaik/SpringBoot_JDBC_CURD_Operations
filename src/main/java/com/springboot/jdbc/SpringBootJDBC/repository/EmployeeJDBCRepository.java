@@ -3,10 +3,12 @@ package com.springboot.jdbc.SpringBootJDBC.repository;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.springboot.jdbc.SpringBootJDBC.exception.EmployeeNotFoundException;
 import com.springboot.jdbc.SpringBootJDBC.model.EmployeeDTO;
 
 @Repository
@@ -37,7 +39,16 @@ public class EmployeeJDBCRepository {
 	}
 	
 	public EmployeeDTO findEmployee(Long empId)  {
-		return jdbcTemplate.queryForObject(FIND_EMPLOYEE_QUERY, new BeanPropertyRowMapper<>(EmployeeDTO.class),empId);
+		
+		EmployeeDTO employeeDTO;
+		
+		try {
+		employeeDTO =	jdbcTemplate.queryForObject(FIND_EMPLOYEE_QUERY, new BeanPropertyRowMapper<>(EmployeeDTO.class),empId);
+		}catch(EmptyResultDataAccessException e) {
+			throw new EmployeeNotFoundException("empId= "+empId);
+		}
+		
+		return employeeDTO;
 	}
 	
 	public Integer updateEmployee(EmployeeDTO employeeDTO) {
