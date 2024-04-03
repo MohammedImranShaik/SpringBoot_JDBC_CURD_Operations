@@ -1,17 +1,29 @@
 package com.springboot.jdbc.SpringBootJDBC.model;
 
-public class EmployeeDTO {
+import org.hibernate.validator.constraints.NotEmpty;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+public class EmployeeDTO { //Employee class map with database table like employee
 	
-	private Long empId;
+	@NotNull
+	private Long empId; //column map with id
 	
-	private String firstName;
+	@NotEmpty(message = "Please Enter the valid First Name")
+	private String firstName; // will map with first name
 	
+	@NotEmpty(message = "Please Enter the Valid Last Name")
+	//@Size(max = 1,message = "Please Enter atleast one Charecter ")
 	private String lastName;
 	
+	@NotNull(message = "Please Enter the Valid Mobile Number")
 	private Long mobileNumber;
 	
+	@NotEmpty
 	private String emailId;
 	
+	@NotNull
 	private Integer age;
 
 	public Long getEmpId() {

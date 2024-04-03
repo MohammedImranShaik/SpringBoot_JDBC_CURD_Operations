@@ -27,17 +27,22 @@ public class EmployeeJDBCRepository {
 
 	private static String DELETE_QUERY = "DELETE FROM EMPLOYEE WHERE EMPID=?";
 
+	
+	// TODO: To see the all the data By using SELECT Query
 	public List<EmployeeDTO> findAllEmployees() {
 
 		return jdbcTemplate.query(SELECT_QUERY, new BeanPropertyRowMapper(EmployeeDTO.class));
 
 	}
-
+	
+    // TODO: To create the Employee data by using INSERT query
 	public int createEmployee(EmployeeDTO employeeDTO) {
 		return jdbcTemplate.update(INSERT_QUERY, employeeDTO.getEmpId(), employeeDTO.getFirstName(), employeeDTO.getLastName(),
 				employeeDTO.getMobileNumber(), employeeDTO.getEmailId(), employeeDTO.getAge());
 	}
 	
+	// TODO: To find the data from the existing the Data
+	//If the data doesn't have then having the exception then we can Customized exception
 	public EmployeeDTO findEmployee(Long empId)  {
 		
 		EmployeeDTO employeeDTO;
@@ -45,16 +50,19 @@ public class EmployeeJDBCRepository {
 		try {
 		employeeDTO =	jdbcTemplate.queryForObject(FIND_EMPLOYEE_QUERY, new BeanPropertyRowMapper<>(EmployeeDTO.class),empId);
 		}catch(EmptyResultDataAccessException e) {
-			throw new EmployeeNotFoundException("empId= "+empId);
+			throw new EmployeeNotFoundException("empId= "+empId+ " not found in the DataBase");
 		}
 		
 		return employeeDTO;
 	}
 	
+	
+	//TODO : from the existing data we can update what we need from the empId by using UPDATE Command
 	public Integer updateEmployee(EmployeeDTO employeeDTO) {
 		return jdbcTemplate.update(UPDATE_QUERY, employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getMobileNumber(), employeeDTO.getEmailId(), employeeDTO.getAge(), employeeDTO.getEmpId());
 	}
 	
+	//TODO : From the existing data we can delete specific employee by using DELETE Command
 	public Integer deleteEmployee(Long empId) {
 		return jdbcTemplate.update(DELETE_QUERY,empId);
 	}
